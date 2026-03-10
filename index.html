@@ -6,7 +6,7 @@
     <title>FutureProof Vroegboekactie Simulator</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; padding: 20px; color: #333; }
-        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         h1 { text-align: center; color: #2c3e50; }
         
         .input-section { display: flex; gap: 20px; margin-bottom: 20px; background: #ecf0f1; padding: 20px; border-radius: 8px; flex-wrap: wrap; }
@@ -16,15 +16,17 @@
         
         .discount-banner { display: none; background: #d4edda; color: #155724; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 30px; border: 1px solid #c3e6cb; font-size: 1.1em; }
         
-        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
         .option-card { border: 2px solid #ecf0f1; border-radius: 8px; padding: 20px; background: #fff; position: relative; transition: transform 0.2s; display: flex; flex-direction: column;}
         .option-card:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); border-color: #3498db; }
-        .option-title { font-size: 1.2em; font-weight: bold; color: #2980b9; margin-bottom: 10px; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
+        .option-title { font-size: 1.1em; font-weight: bold; color: #2980b9; margin-bottom: 10px; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
         
         .pros-cons { font-size: 0.9em; margin-bottom: 15px; flex-grow: 1; }
         .pros { color: #27ae60; margin-bottom: 5px; }
         .cons { color: #c0392b; }
         
+        .extra-discount-label { color: #e67e22; font-size: 0.85em; margin-bottom: 10px; font-weight: bold; background: #fdf2e9; padding: 5px; border-radius: 3px; text-align: center; border: 1px solid #f8c471; }
+
         .price-breakdown { font-size: 0.9em; background: #f9f9f9; padding: 10px; border-radius: 5px; margin-bottom: 15px; }
         .price-row { display: flex; justify-content: space-between; margin-bottom: 2px; }
         .price-per-lln { display: flex; justify-content: flex-end; font-size: 0.85em; color: #7f8c8d; margin-bottom: 8px; font-style: italic; }
@@ -94,6 +96,13 @@
             cons: "Is hetzelfde als vorig jaar",
             pakket: 14.62, combi: 23.60, 
             teachr: 39.00
+        },
+        {
+            id: 6, name: "Optie 6: Teachr = 10% extra korting op alles",
+            pros: "Kunnen budget van nascholingen gebruiken voor leerlingen",
+            cons: "School die voor 8000 euro FTRPRF koopt en maar 20 leerkrachten Teachr maken we verlies op",
+            pakket: 15.50, combi: 25.00, teachr: 39.00,
+            extraKortingBijTeachr: 0.10 // 10% extra als leerkrachten > 0
         }
     ];
 
@@ -109,16 +118,16 @@
         // Bepaal volume voor korting (Combi telt voor 2)
         const volumeScore = aLlnEnkel + (aLlnCombi * 2);
         
-        let kortingsPercentage = 0;
-        if (volumeScore >= 600) kortingsPercentage = 0.20;
-        else if (volumeScore >= 400) kortingsPercentage = 0.15;
-        else if (volumeScore >= 300) kortingsPercentage = 0.10;
-        else if (volumeScore >= 200) kortingsPercentage = 0.05;
+        let basisKortingsPercentage = 0;
+        if (volumeScore >= 600) basisKortingsPercentage = 0.20;
+        else if (volumeScore >= 400) basisKortingsPercentage = 0.15;
+        else if (volumeScore >= 300) basisKortingsPercentage = 0.10;
+        else if (volumeScore >= 200) basisKortingsPercentage = 0.05;
 
         // Update discount banner
         const banner = document.getElementById('discount-banner');
-        if (kortingsPercentage > 0) {
-            banner.innerHTML = `<strong>🎉 Volumekorting Actief!</strong> Volume score is ${volumeScore} pakketten. Dat geeft <strong>${(kortingsPercentage * 100)}% extra korting</strong> op alle lespakketten.`;
+        if (basisKortingsPercentage > 0) {
+            banner.innerHTML = `<strong>🎉 Volumekorting Actief!</strong> Volume score is ${volumeScore} pakketten. Dat geeft <strong>${(basisKortingsPercentage * 100)}% korting</strong> op alle lespakketten.`;
             banner.style.display = 'block';
         } else {
             banner.style.display = 'none';
@@ -128,18 +137,28 @@
         container.innerHTML = ''; 
 
         options.forEach(opt => {
-            // Basis prijzen (zonder volumekorting)
+            // Bereken de totale korting voor deze specifieke optie
+            let totaleKorting = basisKortingsPercentage;
+            let toonExtraLabel = false;
+            
+            // Check voor Optie 6 specifieke korting
+            if (opt.extraKortingBijTeachr && aLeerkrachten > 0) {
+                totaleKorting += opt.extraKortingBijTeachr;
+                toonExtraLabel = true;
+            }
+
+            // Basis prijzen (zonder enige korting)
             const basisEnkel = aLlnEnkel * opt.pakket;
             const basisCombi = aLlnCombi * opt.combi;
             
-            // Prijzen met volumekorting
-            const costEnkel = basisEnkel * (1 - kortingsPercentage);
-            const costCombi = basisCombi * (1 - kortingsPercentage);
+            // Prijzen met de berekende korting voor deze optie
+            const costEnkel = basisEnkel * (1 - totaleKorting);
+            const costCombi = basisCombi * (1 - totaleKorting);
             const costTeachr = aLeerkrachten * opt.teachr;
             
             // Effectieve prijs PER LEERLING
-            const effPrijsEnkelLln = opt.pakket * (1 - kortingsPercentage);
-            const effPrijsCombiLln = opt.combi * (1 - kortingsPercentage);
+            const effPrijsEnkelLln = opt.pakket * (1 - totaleKorting);
+            const effPrijsCombiLln = opt.combi * (1 - totaleKorting);
             
             // Totaal
             const totalCost = costEnkel + costCombi + costTeachr;
@@ -148,12 +167,12 @@
             let enkelTotaalHtml = `<span>${formatEur(costEnkel)}</span>`;
             let combiTotaalHtml = `<span>${formatEur(costCombi)}</span>`;
             
-            let llnKlasse = kortingsPercentage > 0 ? "price-per-lln discounted" : "price-per-lln";
+            let llnKlasse = totaleKorting > 0 ? "price-per-lln discounted" : "price-per-lln";
 
-            if (kortingsPercentage > 0 && aLlnEnkel > 0) {
+            if (totaleKorting > 0 && aLlnEnkel > 0) {
                 enkelTotaalHtml = `<span><span class="strikethrough">${formatEur(basisEnkel)}</span> ${formatEur(costEnkel)}</span>`;
             }
-            if (kortingsPercentage > 0 && aLlnCombi > 0) {
+            if (totaleKorting > 0 && aLlnCombi > 0) {
                 combiTotaalHtml = `<span><span class="strikethrough">${formatEur(basisCombi)}</span> ${formatEur(costCombi)}</span>`;
             }
 
@@ -166,6 +185,7 @@
                     <div class="pros"><strong>+ Pro:</strong> ${opt.pros}</div>
                     <div class="cons"><strong>- Con:</strong> ${opt.cons}</div>
                 </div>
+                ${toonExtraLabel ? `<div class="extra-discount-label">⭐ +10% Optie 6 korting geactiveerd!</div>` : ''}
                 <div class="price-breakdown">
                     <div class="price-row">
                         <span>Enkel Pakketten:</span> 
