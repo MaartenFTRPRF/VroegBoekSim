@@ -137,28 +137,31 @@
         container.innerHTML = ''; 
 
         options.forEach(opt => {
-            // Bereken de totale korting voor deze specifieke optie
-            let totaleKorting = basisKortingsPercentage;
+            let totaleKortingPakketten = basisKortingsPercentage;
+            let kortingTeachr = 0;
             let toonExtraLabel = false;
             
-            // Check voor Optie 6 specifieke korting
+            // Check voor Optie 6 specifieke korting (10% extra op álles, dus ook Teachr)
             if (opt.extraKortingBijTeachr && aLeerkrachten > 0) {
-                totaleKorting += opt.extraKortingBijTeachr;
+                totaleKortingPakketten += opt.extraKortingBijTeachr;
+                kortingTeachr = opt.extraKortingBijTeachr; // Pas 10% toe op Teachr
                 toonExtraLabel = true;
             }
 
             // Basis prijzen (zonder enige korting)
             const basisEnkel = aLlnEnkel * opt.pakket;
             const basisCombi = aLlnCombi * opt.combi;
+            const basisTeachr = aLeerkrachten * opt.teachr;
             
             // Prijzen met de berekende korting voor deze optie
-            const costEnkel = basisEnkel * (1 - totaleKorting);
-            const costCombi = basisCombi * (1 - totaleKorting);
-            const costTeachr = aLeerkrachten * opt.teachr;
+            const costEnkel = basisEnkel * (1 - totaleKortingPakketten);
+            const costCombi = basisCombi * (1 - totaleKortingPakketten);
+            const costTeachr = basisTeachr * (1 - kortingTeachr);
             
-            // Effectieve prijs PER LEERLING
-            const effPrijsEnkelLln = opt.pakket * (1 - totaleKorting);
-            const effPrijsCombiLln = opt.combi * (1 - totaleKorting);
+            // Effectieve prijs PER stuk
+            const effPrijsEnkelLln = opt.pakket * (1 - totaleKortingPakketten);
+            const effPrijsCombiLln = opt.combi * (1 - totaleKortingPakketten);
+            const effPrijsTeachr = opt.teachr * (1 - kortingTeachr);
             
             // Totaal
             const totalCost = costEnkel + costCombi + costTeachr;
@@ -166,14 +169,22 @@
             // Opmaak van de prijslijnen
             let enkelTotaalHtml = `<span>${formatEur(costEnkel)}</span>`;
             let combiTotaalHtml = `<span>${formatEur(costCombi)}</span>`;
+            let teachrTotaalHtml = `<span>${formatEur(costTeachr)}</span>`;
             
-            let llnKlasse = totaleKorting > 0 ? "price-per-lln discounted" : "price-per-lln";
+            let llnKlasse = totaleKortingPakketten > 0 ? "price-per-lln discounted" : "price-per-lln";
+            let teachrKlasse = kortingTeachr > 0 ? "price-per-lln discounted" : "price-per-lln";
 
-            if (totaleKorting > 0 && aLlnEnkel > 0) {
+            // Visualiseer korting op pakketten
+            if (totaleKortingPakketten > 0 && aLlnEnkel > 0) {
                 enkelTotaalHtml = `<span><span class="strikethrough">${formatEur(basisEnkel)}</span> ${formatEur(costEnkel)}</span>`;
             }
-            if (totaleKorting > 0 && aLlnCombi > 0) {
+            if (totaleKortingPakketten > 0 && aLlnCombi > 0) {
                 combiTotaalHtml = `<span><span class="strikethrough">${formatEur(basisCombi)}</span> ${formatEur(costCombi)}</span>`;
+            }
+            
+            // Visualiseer korting op Teachr (enkel voor optie 6)
+            if (kortingTeachr > 0 && aLeerkrachten > 0) {
+                teachrTotaalHtml = `<span><span class="strikethrough">${formatEur(basisTeachr)}</span> ${formatEur(costTeachr)}</span>`;
             }
 
             const card = document.createElement('div');
@@ -185,7 +196,7 @@
                     <div class="pros"><strong>+ Pro:</strong> ${opt.pros}</div>
                     <div class="cons"><strong>- Con:</strong> ${opt.cons}</div>
                 </div>
-                ${toonExtraLabel ? `<div class="extra-discount-label">⭐ +10% Optie 6 korting geactiveerd!</div>` : ''}
+                ${toonExtraLabel ? `<div class="extra-discount-label">⭐ +10% Optie 6 korting (ook op Teachr)!</div>` : ''}
                 <div class="price-breakdown">
                     <div class="price-row">
                         <span>Enkel Pakketten:</span> 
@@ -201,8 +212,9 @@
                     
                     <div class="price-row" style="margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 5px;">
                         <span>Teachr (à €${opt.teachr}):</span> 
-                        <span>${formatEur(costTeachr)}</span>
+                        ${teachrTotaalHtml}
                     </div>
+                    ${aLeerkrachten > 0 && kortingTeachr > 0 ? `<div class="${teachrKlasse}">(komt neer op ${formatEur(effPrijsTeachr)} / leerkracht)</div>` : ''}
                 </div>
                 <div class="total-price">
                     Totaal: ${formatEur(totalCost)}
