@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FutureProof - Prijssimulator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             /* FutureProof Officiële Kleuren & Typografie */
@@ -18,11 +18,11 @@
             --e-global-color-1637b22: #F8FAFC;
             --e-global-color-88b8611: #F1F5F9;
             --e-global-color-0a496ff: #0F172A;
-            
+
             /* Custom TEACHR Accent */
             --teachr-accent: #B9D158;
             --teachr-accent-dark: #9EBA3D;
-            
+
             /* Typografie */
             --e-global-typography-primary-font-family: "Inter", sans-serif;
             --e-global-typography-primary-font-weight: 600;
@@ -33,9 +33,9 @@
             --keydesign-h2-font-size: 44px;
 
             /* UI Variabelen */
-            --success: #10B981; 
+            --success: #10B981;
             --border: #E2E8F0;
-            --receipt-bg: var(--e-global-color-primary); 
+            --receipt-bg: var(--e-global-color-primary);
             --receipt-text: #F1F5F9;
             --receipt-border: #334155;
             --radius: 12px;
@@ -80,12 +80,12 @@
             margin-bottom: 0.5rem;
         }
 
-        h2 { 
-            margin-bottom: 1rem; 
+        h2 {
+            margin-bottom: 1rem;
             font-size: calc(var(--keydesign-h2-font-size) * 0.65);
             line-height: 1.2;
         }
-        
+
         .section-desc {
             color: #64748B;
             margin-bottom: 1.5rem;
@@ -141,6 +141,11 @@
             margin-top: 0.2rem;
         }
 
+        .input-price small {
+            color: #64748B;
+            font-weight: 400;
+        }
+
         input[type="number"] {
             width: 110px;
             padding: 0.75rem;
@@ -176,7 +181,7 @@
             color: white;
             margin: 0;
             font-size: 1.4rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Verbetert de leesbaarheid op de gradiënt */
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         /* Formule Kaarten */
@@ -261,7 +266,7 @@
             left: 0;
             font-weight: bold;
         }
-        
+
         .formula-card .formula-features li.feature-highlight::before {
             color: var(--teachr-accent-dark);
         }
@@ -301,6 +306,12 @@
             font-size: 1.8rem;
         }
 
+        .receipt-header .vat-note {
+            color: #94A3B8;
+            font-size: 0.85rem;
+            margin-top: 0.4rem;
+        }
+
         /* Badges */
         .badges-container {
             display: flex;
@@ -335,51 +346,105 @@
         }
 
         .receipt-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 1.2rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--receipt-border);
+            border-radius: 10px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1rem;
             animation: fadeIn 0.3s ease;
         }
 
-        .item-info {
+        .item-top {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.4rem;
         }
 
         .item-name {
             font-weight: 600;
             font-size: 1.05rem;
+            color: white;
         }
 
-        .item-calc {
-            font-size: 0.9rem;
-            color: #94A3B8;
-            margin-top: 0.2rem;
-        }
-
-        .price-strike {
-            text-decoration: line-through;
-            color: #64748B;
-            margin-right: 0.5rem;
-        }
-
-        .item-total-group {
-            text-align: right;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-        }
-
-        .item-total {
+        .item-total-excl {
             font-weight: 600;
             font-size: 1.1rem;
+            color: white;
+            white-space: nowrap;
+            margin-left: 1rem;
+        }
+
+        .item-unit {
+            font-size: 0.9rem;
+            color: #CBD5E1;
+            margin-bottom: 0.7rem;
+        }
+
+        .item-unit .price-strike {
+            text-decoration: line-through;
+            color: #64748B;
+            margin-right: 0.4rem;
+        }
+
+        .item-unit .price-new {
+            color: white;
+            font-weight: 500;
+        }
+
+        /* Inline discount tags per product */
+        .item-discounts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .discount-tag {
+            background: rgba(185, 209, 88, 0.15);
+            color: var(--teachr-accent);
+            padding: 0.2rem 0.55rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid rgba(185, 209, 88, 0.3);
+            white-space: nowrap;
+        }
+
+        .discount-tag.golden {
+            background: rgba(245, 158, 11, 0.15);
+            color: #FCD34D;
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .discount-tag.volume {
+            background: rgba(38, 99, 235, 0.18);
+            color: #93C5FD;
+            border-color: rgba(38, 99, 235, 0.4);
         }
 
         .item-saved {
             color: var(--teachr-accent);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
-            margin-top: 0.2rem;
+            margin-bottom: 0.6rem;
+        }
+
+        /* Footer per item: prijs incl. btw */
+        .item-vat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0.6rem;
+            border-top: 1px dashed var(--receipt-border);
+            font-size: 0.85rem;
+            color: #94A3B8;
+        }
+
+        .item-vat-total {
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
         }
 
         .bonus-line {
@@ -389,8 +454,8 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            margin-bottom: 1rem;
-            padding: 0.5rem;
+            margin-bottom: 0.7rem;
+            padding: 0.6rem 0.8rem;
             background: rgba(185, 209, 88, 0.1);
             border-radius: 6px;
         }
@@ -414,14 +479,35 @@
             font-weight: 600;
         }
 
+        .total-row.subtotal-excl {
+            color: white;
+            font-weight: 600;
+            padding-top: 0.8rem;
+            border-top: 1px solid var(--receipt-border);
+            margin-top: 0.4rem;
+        }
+
+        .total-row.vat-row {
+            color: #94A3B8;
+            font-size: 0.95rem;
+        }
+
         .total-row.final-total {
             margin-top: 1rem;
             padding-top: 1rem;
-            border-top: 1px solid var(--receipt-border);
+            border-top: 2px solid var(--receipt-border);
             color: white;
             font-size: 1.6rem;
             font-weight: 700;
-            align-items: center;
+            align-items: baseline;
+        }
+
+        .total-row.final-total .label small {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #94A3B8;
+            margin-top: 0.15rem;
         }
 
         /* CTA Knop */
@@ -481,17 +567,17 @@
     <div class="config-panel">
         <div class="header">
             <h1>Configureer je pakket</h1>
-            <p>Bereken direct de investering voor jouw school. Kortingen worden automatisch toegepast!</p>
+            <p>Bereken direct de investering voor jouw school. Kortingen worden automatisch toegepast. Alle prijzen zijn weergegeven excl. en incl. 6% btw.</p>
         </div>
 
         <div class="input-group">
             <h2>1. Lespakketten</h2>
-            <p class="section-desc">Voer het aantal leerlingen in. Volumescore actief.</p>
-            
+            <p class="section-desc">Voer het aantal leerlingen in. Volumekorting wordt automatisch berekend.</p>
+
             <div class="input-row">
                 <div class="input-label">
                     <span class="input-title">Enkel Pakket (IT&ME of WIJS!)</span>
-                    <span class="input-price">€ 15,50 per leerling</span>
+                    <span class="input-price">€ 15,50 incl. btw <small>· € 14,62 excl. btw</small> / leerling</span>
                 </div>
                 <input type="number" id="qtySingle" min="0" value="0" placeholder="0">
             </div>
@@ -499,7 +585,7 @@
             <div class="input-row">
                 <div class="input-label">
                     <span class="input-title">Combi Pakket (Beide)</span>
-                    <span class="input-price">€ 25,00 per leerling</span>
+                    <span class="input-price">€ 25,00 incl. btw <small>· € 23,58 excl. btw</small> / leerling</span>
                 </div>
                 <input type="number" id="qtyCombi" min="0" value="0" placeholder="0">
             </div>
@@ -512,7 +598,7 @@
             <div class="input-row">
                 <div class="input-label">
                     <span class="input-title">TEACHR Licenties</span>
-                    <span class="input-price">€ 39,00 per leerkracht</span>
+                    <span class="input-price" id="teacherPriceLabel">€ 39,00 incl. btw <small>· € 36,79 excl. btw</small> / leerkracht</span>
                 </div>
                 <input type="number" id="qtyTeacher" min="0" value="0" placeholder="0">
             </div>
@@ -520,7 +606,7 @@
             <div class="teachr-banner">
                 <h3>Kies je TEACHR Formule:</h3>
             </div>
-            
+
             <div class="formula-grid">
                 <div class="formula-card active" data-formula="1">
                     <div class="formula-title">Team</div>
@@ -532,7 +618,7 @@
                         <li>5% Vroegboekkorting</li>
                     </ul>
                 </div>
-                
+
                 <div class="formula-card" data-formula="2">
                     <div class="formula-title">Volledige School</div>
                     <ul class="formula-features">
@@ -553,10 +639,8 @@
                         <li>Certificaten</li>
                         <li>Voeg modules toe op maat van de school</li>
                         <li>Onboardingwebinar</li>
-                        <li>5% Vroegboekkorting</li>
-                        <li class="feature-highlight">+ 10% Extra Korting</li>
+                        <li class="feature-highlight">Vaste prijs € 29,00 incl. btw / leerkracht</li>
                         <li class="feature-highlight">+ Fysieke opstart</li>
-                        <li class="feature-highlight">+ Op maat gemaakte prijs</li>
                         <li class="feature-highlight">+ Begeleidingstraject</li>
                     </ul>
                 </div>
@@ -567,10 +651,10 @@
     <div class="receipt-panel">
         <div class="receipt-header">
             <h2>Besteloverzicht</h2>
+            <div class="vat-note">Alle prijzen excl. en incl. 6% btw</div>
         </div>
 
-        <div class="badges-container" id="badgesContainer">
-            </div>
+        <div class="badges-container" id="badgesContainer"></div>
 
         <div class="receipt-lines" id="receiptLines">
             <div class="empty-state">Vul gegevens in om de berekening te starten.</div>
@@ -578,15 +662,23 @@
 
         <div class="receipt-totals">
             <div class="total-row">
-                <span>Subtotaal (Normale prijs)</span>
+                <span>Subtotaal (normale prijs)</span>
                 <span id="subtotalBase">€ 0,00</span>
             </div>
             <div class="total-row discount-row">
                 <span>Totale korting</span>
                 <span id="totalSavings">- € 0,00</span>
             </div>
-            <div class="total-row final-total">
+            <div class="total-row subtotal-excl">
                 <span>Totaal excl. btw</span>
+                <span id="totalExcl">€ 0,00</span>
+            </div>
+            <div class="total-row vat-row">
+                <span>Btw (6%)</span>
+                <span id="vatAmount">€ 0,00</span>
+            </div>
+            <div class="total-row final-total">
+                <span class="label">Totaal incl. btw <small>(eindbedrag)</small></span>
                 <span id="finalTotal">€ 0,00</span>
             </div>
         </div>
@@ -597,11 +689,48 @@
 
 <script>
     // --- 1. Constanten & Basisprijzen ---
-    const PRICES = {
+    const VAT_RATE = 0.06; // Verlaagd btw-tarief 6% (onderwijsmateriaal)
+
+    // Bruto-prijzen incl. btw (zoals gecommuniceerd op de website)
+    const PRICES_INCL = {
         single: 15.50,
         combi: 25.00,
         teacher: 39.00
     };
+
+    // Netto-prijzen excl. btw (afgeleid). Berekeningen werken op excl.-basis;
+    // de btw wordt aan het einde toegevoegd voor het eindbedrag.
+    const PRICES = {
+        single: PRICES_INCL.single / (1 + VAT_RATE),
+        combi: PRICES_INCL.combi / (1 + VAT_RATE),
+        teacher: PRICES_INCL.teacher / (1 + VAT_RATE)
+    };
+
+    const PRODUCT_LABELS = {
+        single: "Enkel Pakket (IT&ME of WIJS!)",
+        combi: "Combi Pakket",
+        teacher: "TEACHR Licentie"
+    };
+
+    // Volumekorting drempels (op basis van volumescore)
+    const VOLUME_TIERS = [
+        { threshold: 600, pct: 20 },
+        { threshold: 400, pct: 15 },
+        { threshold: 300, pct: 10 },
+        { threshold: 200, pct: 5 }
+    ];
+
+    // Gouden Combo voorwaarden
+    const GOLDEN_COMBO = {
+        minVolumeScore: 50,
+        minTeachers: 20,
+        earlyBirdPct: 10
+    };
+    const STANDARD_EARLY_BIRD_PCT = 5;
+    const FORMULA_EXTRA_DISCOUNT_PCT = 10; // Voor School + Scholengroep
+
+    // Scholengroep heeft een onderhandeld vast tarief — geen kortingen.
+    const SCHOLENGROEP_PRICE_INCL = 29.00;
 
     // --- 2. Status Variabelen ---
     let state = {
@@ -621,166 +750,260 @@
         teacher: document.getElementById('qtyTeacher')
     };
     const formulaCards = document.querySelectorAll('.formula-card');
-    const domLines = document.getElementById('receiptLines');
-    const domBadges = document.getElementById('badgesContainer');
-    const domSubtotal = document.getElementById('subtotalBase');
-    const domSavings = document.getElementById('totalSavings');
-    const domFinal = document.getElementById('finalTotal');
+    const dom = {
+        lines: document.getElementById('receiptLines'),
+        badges: document.getElementById('badgesContainer'),
+        subtotal: document.getElementById('subtotalBase'),
+        savings: document.getElementById('totalSavings'),
+        totalExcl: document.getElementById('totalExcl'),
+        vatAmount: document.getElementById('vatAmount'),
+        finalTotal: document.getElementById('finalTotal'),
+        teacherPriceLabel: document.getElementById('teacherPriceLabel')
+    };
 
     // --- 4. Event Listeners Instellen ---
-    // Inputs
     Object.keys(inputs).forEach(key => {
         inputs[key].addEventListener('input', (e) => {
             let val = parseInt(e.target.value) || 0;
-            if (val < 0) { val = 0; e.target.value = 0; } // Geen negatieve getallen
-            state[`qty${key.charAt(0).toUpperCase() + key.slice(1)}`] = val;
+            if (val < 0) { val = 0; e.target.value = 0; }
+            const stateKey = `qty${key.charAt(0).toUpperCase() + key.slice(1)}`;
+            state[stateKey] = val;
             calculateAndRender();
         });
     });
 
-    // Formule Kaarten
     formulaCards.forEach(card => {
         card.addEventListener('click', () => {
-            // UI Update
             formulaCards.forEach(c => c.classList.remove('active'));
             card.classList.add('active');
-            
-            // State Update
             state.selectedFormula = parseInt(card.getAttribute('data-formula'));
             calculateAndRender();
         });
     });
 
-    // --- 5. Kernlogica Berekeningen ---
+    // --- 5. Hulp-functies ---
+    function getVolumeDiscountPct(volumeScore) {
+        for (const tier of VOLUME_TIERS) {
+            if (volumeScore >= tier.threshold) return tier.pct;
+        }
+        return 0;
+    }
+
+    function resetReceipt() {
+        dom.lines.innerHTML = '<div class="empty-state">Vul gegevens in om de berekening te starten.</div>';
+        dom.badges.innerHTML = '';
+        dom.subtotal.textContent = currency.format(0);
+        dom.savings.textContent = '- ' + currency.format(0);
+        dom.totalExcl.textContent = currency.format(0);
+        dom.vatAmount.textContent = currency.format(0);
+        dom.finalTotal.textContent = currency.format(0);
+    }
+
+    /**
+     * Genereert HTML voor één productlijn op het ticket.
+     * Toont per stuk en lijntotaal INCL. btw (zoals klant ze herkent),
+     * met inline kortingstags. De excl.-prijs staat onderaan elke regel.
+     */
+    function renderLine(productKey, qty, basePrice, appliedDiscounts) {
+        if (qty === 0) return '';
+
+        const totalDiscountPct = appliedDiscounts.reduce((sum, d) => sum + d.pct, 0);
+        const savedPerItem = basePrice * (totalDiscountPct / 100);
+        const newPricePerItem = basePrice - savedPerItem;
+        const lineTotalExcl = newPricePerItem * qty;
+        const lineTotalIncl = lineTotalExcl * (1 + VAT_RATE);
+        const lineSavingsExcl = savedPerItem * qty;
+        const lineSavingsIncl = lineSavingsExcl * (1 + VAT_RATE);
+
+        // Incl.-versies voor de zichtbare per-stuk weergave
+        const basePriceIncl = basePrice * (1 + VAT_RATE);
+        const newPricePerItemIncl = newPricePerItem * (1 + VAT_RATE);
+
+        // Discount-tags inline
+        const discountTagsHTML = appliedDiscounts.length > 0
+            ? `<div class="item-discounts">
+                ${appliedDiscounts.map(d =>
+                    `<span class="discount-tag ${d.style || ''}">−${d.pct}% ${d.label}</span>`
+                ).join('')}
+              </div>`
+            : '';
+
+        // Per stuk weergave (incl. btw)
+        const unitHTML = totalDiscountPct > 0
+            ? `<span class="price-strike">${currency.format(basePriceIncl)}</span>
+               <span class="price-new">${currency.format(newPricePerItemIncl)}</span> / stuk incl. btw`
+            : `<span class="price-new">${currency.format(basePriceIncl)}</span> / stuk incl. btw`;
+
+        const savedHTML = lineSavingsIncl > 0
+            ? `<div class="item-saved">Je bespaart: ${currency.format(lineSavingsIncl)} incl. btw</div>`
+            : '';
+
+        return `
+            <div class="receipt-item">
+                <div class="item-top">
+                    <span class="item-name">${qty}× ${PRODUCT_LABELS[productKey]}</span>
+                    <span class="item-total-excl">${currency.format(lineTotalIncl)}</span>
+                </div>
+                <div class="item-unit">${unitHTML}</div>
+                ${discountTagsHTML}
+                ${savedHTML}
+                <div class="item-vat">
+                    <span>excl. 6% btw</span>
+                    <span class="item-vat-total">${currency.format(lineTotalExcl)}</span>
+                </div>
+            </div>
+        `;
+    }
+
+    // --- 6. Kernlogica ---
     function calculateAndRender() {
         const { qtySingle, qtyCombi, qtyTeacher, selectedFormula } = state;
         const totalItemsOrdered = qtySingle + qtyCombi + qtyTeacher;
+        const isScholengroep = selectedFormula === 3;
 
-        // Als er niets is ingevuld, toon empty state
+        // Werk de TEACHR input-label altijd bij, ook bij lege state
+        if (isScholengroep) {
+            const teacherPriceExclScholengroep = SCHOLENGROEP_PRICE_INCL / (1 + VAT_RATE);
+            dom.teacherPriceLabel.innerHTML =
+                `€ 29,00 incl. btw <small>· ${currency.format(teacherPriceExclScholengroep)} excl. btw</small> / leerkracht ` +
+                `<small style="color: var(--teachr-accent-dark); font-weight:600;">· Scholengroepstarief</small>`;
+        } else {
+            dom.teacherPriceLabel.innerHTML =
+                `€ 39,00 incl. btw <small>· € 36,79 excl. btw</small> / leerkracht`;
+        }
+
         if (totalItemsOrdered === 0) {
-            domLines.innerHTML = '<div class="empty-state">Vul gegevens in om de berekening te starten.</div>';
-            domBadges.innerHTML = '';
-            domSubtotal.textContent = currency.format(0);
-            domSavings.textContent = '- ' + currency.format(0);
-            domFinal.textContent = currency.format(0);
+            resetReceipt();
             return;
         }
 
-        // --- A. Kortingslogica Bepalen ---
-        
-        // 1. Volumescore (Enkel op lespakketten)
-        const volumeScore = qtySingle + (qtyCombi * 2);
-        let volumeDiscountPct = 0;
-        if (volumeScore >= 600) volumeDiscountPct = 20;
-        else if (volumeScore >= 400) volumeDiscountPct = 15;
-        else if (volumeScore >= 300) volumeDiscountPct = 10;
-        else if (volumeScore >= 200) volumeDiscountPct = 5;
+        // --- A. Kortingen bepalen ---
 
-        // 2. Vroegboekkorting (Op alles)
-        let earlyBirdPct = 0;
-        let isGoldenCombo = false;
-        
+        // 1. Volumescore (alleen op lespakketten — onafhankelijk van formule)
+        const volumeScore = qtySingle + (qtyCombi * 2);
+        const volumeDiscountPct = getVolumeDiscountPct(volumeScore);
+
+        // 2. Vroegboek- of Gouden Combo-korting (op alles, behalve TEACHR bij scholengroep)
+        const isGoldenCombo =
+            volumeScore >= GOLDEN_COMBO.minVolumeScore &&
+            qtyTeacher >= GOLDEN_COMBO.minTeachers;
+        const earlyBirdPct = isGoldenCombo
+            ? GOLDEN_COMBO.earlyBirdPct
+            : STANDARD_EARLY_BIRD_PCT;
+
+        // 3. Formulekorting:
+        //    - Volledige School: 10% korting op TEACHR
+        //    - Scholengroep: GEEN korting (vaste prijs van € 29,00 incl. btw)
+        //    - Team: geen extra korting
+        const formulaDiscountPct =
+            selectedFormula === 2 ? FORMULA_EXTRA_DISCOUNT_PCT : 0;
+
+        // 4. Effectieve TEACHR-prijs (excl. btw) op basis van formule
+        const teacherPriceExcl = isScholengroep
+            ? SCHOLENGROEP_PRICE_INCL / (1 + VAT_RATE)
+            : PRICES.teacher;
+
+        // --- B. Korting-arrays per producttype ---
+        const earlyBirdDiscount = isGoldenCombo
+            ? { pct: earlyBirdPct, label: 'Gouden Combo', style: 'golden' }
+            : { pct: earlyBirdPct, label: 'Vroegboek' };
+
+        const lessonDiscounts = [];
+        const teacherDiscounts = [];
+
         if (totalItemsOrdered > 0) {
-            // Check "Gouden Combo"
-            if (volumeScore >= 50 && qtyTeacher >= 20) {
-                earlyBirdPct = 10;
-                isGoldenCombo = true;
-            } else {
-                earlyBirdPct = 5;
+            lessonDiscounts.push({ ...earlyBirdDiscount });
+            // TEACHR krijgt GEEN vroegboek/gouden combo bij scholengroep
+            if (!isScholengroep) {
+                teacherDiscounts.push({ ...earlyBirdDiscount });
             }
         }
+        if (volumeDiscountPct > 0) {
+            lessonDiscounts.push({
+                pct: volumeDiscountPct,
+                label: 'Volume',
+                style: 'volume'
+            });
+        }
+        if (formulaDiscountPct > 0) {
+            teacherDiscounts.push({
+                pct: formulaDiscountPct,
+                label: 'Formule'
+            });
+        }
 
-        // 3. TEACHR Formule Korting
-        let formulaDiscountPct = (selectedFormula === 2 || selectedFormula === 3) ? 10 : 0;
-
-        // --- B. Lijn Berekeningen ---
-        // Kortingen worden gestapeld door de percentages op te tellen en te berekenen op de basisprijs
-        const lessonDiscountPctTotal = volumeDiscountPct + earlyBirdPct;
-        const teacherDiscountPctTotal = formulaDiscountPct + earlyBirdPct;
-
+        // --- C. Lijnen renderen + totalen verzamelen ---
         let receiptHTML = '';
-        let badgesHTML = '';
         let totalBaseSum = 0;
-        let totalSavingsSum = 0;
+        let totalDiscountedSum = 0;
 
-        // Functie om een lijn te genereren
-        const generateLine = (name, qty, basePrice, discountPctTotal) => {
-            if (qty === 0) return;
+        const lines = [
+            { key: 'single', qty: qtySingle, price: PRICES.single, discounts: lessonDiscounts },
+            { key: 'combi', qty: qtyCombi, price: PRICES.combi, discounts: lessonDiscounts },
+            { key: 'teacher', qty: qtyTeacher, price: teacherPriceExcl, discounts: teacherDiscounts }
+        ];
 
-            const subtotalBase = qty * basePrice;
-            const savedPerItem = basePrice * (discountPctTotal / 100);
-            const newPricePerItem = basePrice - savedPerItem;
-            
-            const lineTotal = newPricePerItem * qty;
-            const lineSavings = savedPerItem * qty;
+        lines.forEach(line => {
+            if (line.qty === 0) return;
+            const totalPct = line.discounts.reduce((s, d) => s + d.pct, 0);
+            const baseLine = line.qty * line.price;
+            const discountedLine = baseLine * (1 - totalPct / 100);
+            totalBaseSum += baseLine;
+            totalDiscountedSum += discountedLine;
+            receiptHTML += renderLine(line.key, line.qty, line.price, line.discounts);
+        });
 
-            totalBaseSum += subtotalBase;
-            totalSavingsSum += lineSavings;
-
-            receiptHTML += `
-                <div class="receipt-item">
-                    <div class="item-info">
-                        <span class="item-name">${qty}x ${name}</span>
-                        <span class="item-calc">
-                            ${discountPctTotal > 0 ? `<span class="price-strike">${currency.format(basePrice)}</span>` : ''}
-                            ${currency.format(newPricePerItem)} / st
-                        </span>
-                    </div>
-                    <div class="item-total-group">
-                        <span class="item-total">${currency.format(lineTotal)}</span>
-                        ${lineSavings > 0 ? `<span class="item-saved">- ${currency.format(lineSavings)}</span>` : ''}
-                    </div>
-                </div>
-            `;
-        };
-
-        // Genereer de actieve lijnen
-        generateLine("Enkel Pakket (IT&ME of WIJS!)", qtySingle, PRICES.single, lessonDiscountPctTotal);
-        generateLine("Combi Pakket", qtyCombi, PRICES.combi, lessonDiscountPctTotal);
-        generateLine("TEACHR Licentie", qtyTeacher, PRICES.teacher, teacherDiscountPctTotal);
-
-        // --- C. Bonussen ---
+        // --- D. Bonus-lijnen (formulevoordelen) ---
         if (qtyTeacher > 0) {
             if (selectedFormula === 2) {
-                receiptHTML += `<div class="bonus-line">🎁 Fysieke Opstart - Inbegrepen (€ 0,00)</div>`;
+                receiptHTML += `<div class="bonus-line">🎁 Fysieke Opstart — Inbegrepen (€ 0,00)</div>`;
             } else if (selectedFormula === 3) {
-                receiptHTML += `<div class="bonus-line">🎁 Fysieke Opstart - Inbegrepen (€ 0,00)</div>`;
-                receiptHTML += `<div class="bonus-line">🎁 Begeleidingstraject - Inbegrepen (€ 0,00)</div>`;
+                receiptHTML += `<div class="bonus-line">🎁 Fysieke Opstart — Inbegrepen (€ 0,00)</div>`;
+                receiptHTML += `<div class="bonus-line">🎁 Begeleidingstraject — Inbegrepen (€ 0,00)</div>`;
             }
         }
 
-        // --- D. Badges Genereren ---
+        // --- E. Badges (samenvatting van actieve kortingen / tarieven) ---
+        let badgesHTML = '';
         if (isGoldenCombo) {
-            badgesHTML += `<div class="badge golden">🌟 10% Gouden Combo actief!</div>`;
-        } else if (earlyBirdPct > 0) {
+            badgesHTML += `<div class="badge golden">🌟 ${earlyBirdPct}% Gouden Combo actief!</div>`;
+        } else {
             badgesHTML += `<div class="badge">🕒 ${earlyBirdPct}% Vroegboekkorting</div>`;
         }
-
         if (volumeDiscountPct > 0) {
             badgesHTML += `<div class="badge volume">📦 ${volumeDiscountPct}% Volumekorting</div>`;
         }
-
-        if (formulaDiscountPct > 0 && qtyTeacher > 0) {
-            badgesHTML += `<div class="badge formula">🏫 ${formulaDiscountPct}% Formulekorting</div>`;
+        if (qtyTeacher > 0) {
+            if (isScholengroep) {
+                badgesHTML += `<div class="badge formula">🏫 Vaste scholengroepsprijs</div>`;
+            } else if (formulaDiscountPct > 0) {
+                badgesHTML += `<div class="badge formula">🏫 ${formulaDiscountPct}% Formulekorting</div>`;
+            }
         }
 
-        // --- E. DOM Updaten ---
-        domBadges.innerHTML = badgesHTML;
-        domLines.innerHTML = receiptHTML;
-        
-        domSubtotal.textContent = currency.format(totalBaseSum);
-        domSavings.textContent = `- ${currency.format(totalSavingsSum)}`;
-        domFinal.textContent = currency.format(totalBaseSum - totalSavingsSum);
+        // --- F. Eindbedragen berekenen ---
+        const totalSavings = totalBaseSum - totalDiscountedSum;
+        const totalExcl = totalDiscountedSum;
+        const vatAmount = totalExcl * VAT_RATE;
+        const totalIncl = totalExcl + vatAmount;
+
+        // --- G. DOM updaten ---
+        dom.badges.innerHTML = badgesHTML;
+        dom.lines.innerHTML = receiptHTML;
+        dom.subtotal.textContent = currency.format(totalBaseSum);
+        dom.savings.textContent = `- ${currency.format(totalSavings)}`;
+        dom.totalExcl.textContent = currency.format(totalExcl);
+        dom.vatAmount.textContent = currency.format(vatAmount);
+        dom.finalTotal.textContent = currency.format(totalIncl);
     }
 
-    // Initialiseer (voor het geval de browser inputwaarden vasthoudt bij een soft-refresh)
+    // Initialiseer (voor browsers die inputwaarden vasthouden bij soft-refresh)
     window.addEventListener('DOMContentLoaded', () => {
         state.qtySingle = parseInt(inputs.single.value) || 0;
         state.qtyCombi = parseInt(inputs.combi.value) || 0;
         state.qtyTeacher = parseInt(inputs.teacher.value) || 0;
         calculateAndRender();
     });
-
 </script>
 
 </body>
